@@ -8,11 +8,11 @@ with open('data.csv') as f:
     my_music = list(reader)
 
 # open the text file in read
-#text_file = open('top-500-songs.txt', 'r')
+text_file = open('top-500-songs.txt', 'r')
 # read each line of the text file
 # here is where you can print out the lines to your terminal and get an idea
 # for how you might think about re-formatting the data
-# lines = text_file.readlines()
+lines = text_file.readlines()
 
 
 file = open('track_data.json', 'r')
@@ -20,11 +20,13 @@ json_data = json.load(file)
 
 json_data[0].keys()
 
+new_list = []
+final_list = []
+dic_list = []
+key = ['number', 'name', 'artist', 'year']
+
 for i in range(len(lines)):
-    new_list = []
-    final_list = []
-    dic_list = []
-    key = ['number', 'name', 'artist', 'year']
+
     # this is to split and to remove the \n caracter at the end of each sting
     #
     s1 = (lines[i].replace('\n', '\t'))
