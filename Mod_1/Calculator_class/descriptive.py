@@ -9,4 +9,4 @@ import math
 
 
 class Calculator:
-    pass        
+    pass
