@@ -68,14 +68,19 @@ def parse_results(results):
     return listdata
 
 
-def get_data(url, offset):
-    # counter that will update the 'offset' value
-    total_result = []
-    data = yelp_call(url, offset)
-    for i in range(offset, data['total'], 50):
-        data = yelp_call(url, i)
-        data_parced = parse_results(data['businesses'])
-        total_result.append(data_parced)
+# def get_data(cursor,url, offset):
+#     # counter that will update the 'offset' value
+#     total_result = []
+#     #data = yelp_call(url, offset)
+#     for i in range(offset, 1000, 50):
+#         data = yelp_call(url, i)
+#         data_parced = parse_results(data['businesses'])
+#         cursor.execute( """INSERT INTO businesses
+#         (id, name, review_count, price, rating)
+#          VALUES (%s, %s, %s, %s, %s)""" )
+
+        # total_result.append(data_parced)
+
     return total_result
 
 
@@ -84,3 +89,41 @@ def db_insert(cnx, cursor, parsed_results):
     # I would create the connection and cursor outside of this function and
     # then pass it through
     return None
+
+
+def got_review(list_id):
+    headers = {'Authorization': 'Bearer {}'.format(config.api_key), }
+    total_list = []
+    for x in range(len(list_id)):
+        new_url = 'https://api.yelp.com/v3/businesses/' + \
+            list_id[x][0] + '/reviews'
+        response = requests.get(new_url, headers=headers)
+        data = response.json()
+        review = data['reviews']
+        reviews = [list_id[x][0]]
+        for i in range(len(data['reviews'])):
+            text_review = review[i]['text']
+            reviews.append(text_review)
+        total_list.append(tuple(reviews))
+
+
+def get_review(list_id):
+    headers = {'Authorization': 'Bearer {}'.format(config.api_key), }
+    total_list = []
+    for x in range(len(list_id)):
+        new_url = 'https://api.yelp.com/v3/businesses/' + \
+            list_id[x][0] + '/reviews'
+        response = requests.get(new_url, headers=headers)
+        data = response.json()
+        review = data['reviews']
+        total_review_tuble = []
+
+        for i in range(len(data['reviews'])):
+            rev_tup = (buz_id[x][0],
+               rev_1['reviews'][i].get('id', None),
+               rev_1['reviews'][i].get('rating', None),
+               rev_1['reviews'][i].get('time_created', None),
+               rev_1['reviews'][i].get('text', None))
+            total_review_tuble.append(rev_tup)
+        total_list.append(tuple(reviews))
+     return(total_list)
